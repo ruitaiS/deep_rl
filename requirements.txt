@@ -1,0 +1,9 @@
+stable-baselines3==2.0.0a5
+swig
+gymnasium[box2d]
+huggingface_sb3
+IPython
+numpy
+pygame
+
+# python3.10 or 3.11

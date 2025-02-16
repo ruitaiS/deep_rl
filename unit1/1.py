@@ -1,8 +1,5 @@
+import pygame
 import gymnasium as gym
-import matplotlib.pyplot as plt
-import numpy as np
-from IPython.display import display, clear_output
-from PIL import Image
 
 from huggingface_sb3 import load_from_hub, package_to_hub
 from huggingface_hub import notebook_login
@@ -10,59 +7,20 @@ from huggingface_hub import notebook_login
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
+from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3.common.monitor import Monitor
 
-#from pyvirtualdisplay import Display
-
-import pygame
-
-
-#virtual_display = Display(visible=1, size=(600, 400))
-#virtual_display.start()
-
-pygame.init()
-screen = pygame.display.set_mode((600, 400)) 
+import torch
+import torch.nn as nn
 
 env = gym.make("LunarLander-v2", render_mode="rgb_array")
 observation, info = env.reset()
-print(f"Observation: {observation}, Info: {info}")
 
-for _ in range(2000):
-	action = env.action_space.sample()
-	#print(f"Action taken:{action}")
-
-	# Next step as a result of sampled action
-	observation, reward, terminated, truncated, info = env.step(action)
-	#print(f"Observation: {observation}, Reward: {reward}, Info: {info}")
-
-	frame = env.render()
-	if frame is not None:
-        # Convert Gym frame to Pygame format
-		surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
-		screen.blit(surface, (0, 0))
-		pygame.display.flip()
-	else:
-		print("⚠️ Warning: Frame is None or not an array!")
-
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			break
-
-	if terminated or truncated:
-		print("resetting environment")
-		observation, info = env.reset()
-
-env.close()
-pygame.quit()
-
-'''
-env = gym.make("LunarLander-v2")
-env.reset()
 print("_____OBSERVATION SPACE_____ \n")
 print("Observation Space Shape", env.observation_space.shape)
 print("Sample observation", env.observation_space.sample()) # Get a random observation
 
-"""Observation Space Shape (8,):
+"""Observation Space Shape (8,):env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
 - Horizontal pad coordinate (x)
 - Vertical pad coordinate (y)
 - Horizontal speed (x)
@@ -83,6 +41,112 @@ print("Action Space Sample", env.action_space.sample()) # Take a random action
 - Action 2: Fire the main engine,
 - Action 3: Fire right orientation engine.
 """
+
+# Train and Save:
+'''
+env = make_vec_env('LunarLander-v2', n_envs=16)
+model = PPO(
+    policy = 'MlpPolicy',
+    env = env,
+    n_steps = 1024,
+    batch_size = 64,
+    n_epochs = 4,
+    gamma = 0.999,
+    gae_lambda = 0.98,
+    ent_coef = 0.01,
+    verbose=1)
+
+model.learn(total_timesteps = 500000)
+model.save("ppo-LunarLander-v2")
+
+eval_env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
+mean_reward, std_reward = evaluate_policy(model, eval_env, n_eval_episodes=10, deterministic=True)
+print(f"mean_reward: {mean_reward:.2f}, sd: {std_reward}")
+'''
+
+# Build on base policy a little
+class Policy(ActorCriticPolicy):
+    def __init__(self, base_policy):
+        super().__init__(base_policy.observation_space, base_policy.action_space, lr_schedule = lambda _ : 0.0003)
+        self.base_policy = base_policy
+
+    def forward(self, obs):
+        logits, value = self.base_policy.forward(obs)
+
+		# Cut Engines on Touchdown
+        switch_mask = (obs[:, 6] > 0.5) & (obs[:, 7] > 0.5)
+        logits[switch_mask, 1:] = -1e10
+
+        return logits, value
+
+# Load Trained Model:
+model = PPO.load("ppo-LunarLander-v2")
+#model.policy = Policy(model.policy)
+env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
+
+# Demo The Trained Model:
+pygame.init()
+screen = pygame.display.set_mode((600, 400))
+observation, info = env.reset()
+episode_reward = 0
+episode_steps = 0
+for _ in range(10000):
+	action, _ = model.predict(observation)
+
+	#if observation[6] and observation[7]:
+	#	action = 0
+
+
+
+	'''
+	- Horizontal pad coordinate (x)
+	- Vertical pad coordinate (y)
+	- Horizontal speed (x) 2
+	- Vertical speed (y) 3
+	- Angle 4
+	- Angular speed 5
+	- If the left leg contact point has touched the land (boolean) 6
+	- If the right leg contact point has touched the land (boolean) 7
+	'''
+
+
+	#action = env.action_space.sample()
+	#print(f"Action taken:{action}")
+
+	# Next step as a result of sampled action
+	observation, reward, terminated, truncated, info = env.step(action)
+	episode_reward += reward
+	episode_steps += 1
+	#print(f"Observation: {observation}, Reward: {reward}, Info: {info}")
+
+	frame = env.render()
+	if frame is not None:
+        # Convert Gym frame to Pygame format
+		surface = pygame.surfarray.make_surface(frame.swapaxes(0, 1))
+		screen.blit(surface, (0, 0))
+		pygame.display.flip()
+	else:
+		print("⚠️ Warning: Frame is None or not an array!")
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			break
+
+	if terminated or truncated:
+		print(f"Total Reward: {episode_reward}, Total Steps: {episode_steps}")
+		print(f"Terminated: {terminated}, Truncated: {truncated}")
+		print("resetting environment")
+		episode_reward = 0
+		episode_steps = 0
+		observation, info = env.reset()
+
+env.close()
+pygame.quit()
+
+'''
+env = gym.make("LunarLander-v2")
+env.reset()
+
 
 #### Vectorized Environment
 # Create a vectorized environment

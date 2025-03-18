@@ -73,10 +73,10 @@ class Policy(ActorCriticPolicy):
 
 	def forward(self, obs):
 		return super().forward(obs)
-		
+
 	def forward_actor(self, obs):
 		return super().forward_actor(obs)
-		
+
 	def forward_critic(self, obs):
 		return super().forward_critic(obs)
 
@@ -89,7 +89,6 @@ class Policy(ActorCriticPolicy):
 		else:
 			return action, None
 
-	
 # Load Trained Model and apply extension:
 model = PPO.load("ppo-LunarLander-v2")
 model.policy = Policy(model.policy)

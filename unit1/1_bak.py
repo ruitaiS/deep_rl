@@ -17,8 +17,11 @@ import numpy as np
 env = gym.make("LunarLander-v2", render_mode="rgb_array")
 observation, info = env.reset()
 
-"""
-Observation Space Shape (8,):
+print("_____OBSERVATION SPACE_____ \n")
+print("Observation Space Shape", env.observation_space.shape)
+print("Sample observation", env.observation_space.sample()) # Get a random observation
+
+"""Observation Space Shape (8,):env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
 - Horizontal pad coordinate (x)
 - Vertical pad coordinate (y)
 - Horizontal speed (x)
@@ -27,18 +30,18 @@ Observation Space Shape (8,):
 - Angular speed
 - If the left leg contact point has touched the land (boolean)
 - If the right leg contact point has touched the land (boolean)
+"""
 
-Action Space Shape 4:
+print("\n _____ACTION SPACE_____ \n")
+print("Action Space Shape", env.action_space.n)
+print("Action Space Sample", env.action_space.sample()) # Take a random action
+
+"""Action Space Shape 4:
 - Action 0: Do nothing,
 - Action 1: Fire left orientation engine,
 - Action 2: Fire the main engine,
 - Action 3: Fire right orientation engine.
 """
-print("_____OBSERVATION SPACE_____ \n")
-print("Observation Space Shape", env.observation_space.shape)
-print("\n _____ACTION SPACE_____ \n")
-print("Action Space Shape", env.action_space.n)
-
 
 # Train and Save:
 '''
@@ -103,6 +106,11 @@ episode_reward = 0
 episode_steps = 0
 for _ in range(10000):
 	action, _ = model.predict(observation)
+
+	#if observation[6] and observation[7]:
+	#	action = 0
+
+
 
 	'''
 	- Horizontal pad coordinate (x)

@@ -1,12 +1,8 @@
 ## Lunar Lander RL Model
 
-Huggingface Repository for this model:
+Huggingface Repository for this model: https://huggingface.co/shaoruitai/lander_model
 
-https://huggingface.co/shaoruitai/lander_model
-
-This readme is largely adapted from the course material:
-
-https://huggingface.co/learn/deep-rl-course/en/unit1/hands-on
+This readme is adapted from the course text: https://huggingface.co/learn/deep-rl-course/en/unit1/hands-on
 
 ### Observation Space:
 0) Horizontal pad coordinate (x)

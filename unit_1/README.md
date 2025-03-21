@@ -1,6 +1,6 @@
 ## Lunar Lander RL Model
 
-![model_demo](https://github.com/ruitaiS/deep_rl/tree/master/unit_1/replay.gif)
+![model_demo](https://github.com/ruitaiS/deep_rl/blob/master/unit_1/replay.GIF)
 
 Huggingface Repository for this model: https://huggingface.co/shaoruitai/lander_model
 

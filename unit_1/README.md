@@ -1,4 +1,4 @@
-## Lunar Lander RL Model
+## Lunar Lander
 
 ![model_demo](https://github.com/ruitaiS/deep_rl/blob/master/unit_1/replay.GIF)
 

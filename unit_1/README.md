@@ -1,6 +1,11 @@
 ## Lunar Lander RL Model
 
-Adapted largely from:
+Huggingface Repository for this model:
+
+https://huggingface.co/shaoruitai/lander_model
+
+This readme is largely adapted from the course material:
+
 https://huggingface.co/learn/deep-rl-course/en/unit1/hands-on
 
 ### Observation Space:

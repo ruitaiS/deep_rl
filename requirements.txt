@@ -7,5 +7,6 @@ numpy
 pygame
 
 huggingface_hub[cli]
+moviepy
 
 # python3.10 or 3.11

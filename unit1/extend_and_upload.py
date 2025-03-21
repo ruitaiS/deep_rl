@@ -14,9 +14,10 @@ model.policy = Policy(model.policy)
 
 demo.run_demo(model)
 
-package_to_hub(model,
-               model_architecture='todo',
-               env_id='todo',
-               eval_env=DummyVecEnv([lambda:gym.make(env_id,render_mode='rgb_array')]),
-               repo_id='todo',
+package_to_hub(model_name='lander_model0',
+               model=model,
+               model_architecture='PPO',
+               env_id='LunarLander-v2',
+               eval_env=DummyVecEnv([lambda:gym.make('LunarLander-v2',render_mode='rgb_array')]),
+               repo_id='shaoruitai/lander_model',
                commit_message='test0')

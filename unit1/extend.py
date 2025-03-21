@@ -1,19 +1,6 @@
-import pygame
 import gymnasium as gym
-
-from huggingface_sb3 import load_from_hub, package_to_hub
-from huggingface_hub import notebook_login
-
 from stable_baselines3 import PPO
-from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.policies import ActorCriticPolicy
-from stable_baselines3.common.monitor import Monitor
-
-import torch
-import torch.nn as nn
-import numpy as np
-
+from custom_policy import Policy
 import demo
 
 env = gym.make("LunarLander-v2", render_mode="rgb_array")
@@ -44,8 +31,17 @@ class Policy(ActorCriticPolicy):
 			return action, None
 
 # Load Trained Model and apply extension:
-model = PPO.load("ppo-LunarLander-v2")
+model = PPO.load("base_policy")
 model.policy = Policy(model.policy)
 model.save("extended_policy")
 
 demo.run_demo(model=model)
+
+'''
+# Load Trained Model and apply extension:
+model = PPO.load("base_policy")
+model.policy = Policy(model.policy)
+model.save("extended_policy")
+
+demo.run_demo(model=model)
+'''

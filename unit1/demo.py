@@ -1,24 +1,16 @@
 import pygame
 import gymnasium as gym
 
-from huggingface_sb3 import load_from_hub, package_to_hub
-from huggingface_hub import notebook_login
 
 from stable_baselines3 import PPO
-from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3.common.monitor import Monitor
 
-import torch
-import torch.nn as nn
-import numpy as np
 
 def run_demo(model, model_filename=None):
 
     env = gym.make("LunarLander-v2", render_mode="rgb_array")
     observation, info = env.reset()
-    if not model:
+    if model is None:
         model = PPO.load(model_filename)
     env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
 
@@ -75,3 +67,6 @@ def run_demo(model, model_filename=None):
 
     env.close()
     pygame.quit()
+
+run_demo(model=None, model_filename='base_policy')
+run_demo(model=None, model_filename='extended_policy')

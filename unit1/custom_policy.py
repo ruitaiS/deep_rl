@@ -1,6 +1,6 @@
 from stable_baselines3.common.policies import ActorCriticPolicy
 import numpy as np
-
+import random
 
 # Build on base policy:
 class Policy(ActorCriticPolicy):
@@ -27,17 +27,22 @@ class Policy(ActorCriticPolicy):
         print("Observations Shape: ", obs.shape)
         print("Actions Shape: ", actions.shape)
 
+        # Randomly cut engines for fun
+        #p = 0.01
+        #sputter = random.random() < p
+        sputter = False
+
         # Convert obs to numpy if it's a torch tensor
         obs_array = obs if isinstance(obs, np.ndarray) else obs.cpu().numpy()
 
         # Handle single observation (shape (obs_dim,))
         if obs_array.ndim == 1:
-            if obs_array[6] or obs_array[7]:
+            if obs_array[6] or obs_array[7] or sputter:
                 return 0, None  # Cut engines
         return actions, None
 
         # Handle batched observation (shape (batch_size, obs_dim))
         for i in range(obs_array.shape[0]):
-            if obs_array[i][6] or obs_array[i][7]:
+            if obs_array[i][6] or obs_array[i][7] or sputter:
                 actions[i] = 0  # Cut engines for that env
         return actions, None

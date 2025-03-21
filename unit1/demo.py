@@ -19,21 +19,6 @@ def run_demo(model):
     for _ in range(10000):
         action, _ = model.predict(observation)
 
-        '''
-        - Horizontal pad coordinate (x)
-        - Vertical pad coordinate (y)
-        - Horizontal speed (x) 2
-        - Vertical speed (y) 3
-        - Angle 4
-        - Angular speed 5
-        - If the left leg contact point has touched the land (boolean) 6
-        - If the right leg contact point has touched the land (boolean) 7
-        '''
-
-
-        #action = env.action_space.sample()
-        #print(f"Action taken:{action}")
-
         # Next step as a result of sampled action
         observation, reward, terminated, truncated, info = env.step(action)
         episode_reward += reward

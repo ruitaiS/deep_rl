@@ -6,4 +6,6 @@ IPython
 numpy
 pygame
 
+huggingface_hub[cli]
+
 # python3.10 or 3.11

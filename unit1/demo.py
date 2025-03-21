@@ -1,17 +1,13 @@
 import pygame
 import gymnasium as gym
-
-
 from stable_baselines3 import PPO
 from stable_baselines3.common.monitor import Monitor
 
 
-def run_demo(model, model_filename=None):
+def run_demo(model):
 
     env = gym.make("LunarLander-v2", render_mode="rgb_array")
     observation, info = env.reset()
-    if model is None:
-        model = PPO.load(model_filename)
     env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))
 
     # Demo The Trained Model:
@@ -68,5 +64,5 @@ def run_demo(model, model_filename=None):
     env.close()
     pygame.quit()
 
-run_demo(model=None, model_filename='base_policy')
-run_demo(model=None, model_filename='extended_policy')
+#run_demo(model=None, model_filename='base_policy')
+#run_demo(model=None, model_filename='extended_policy')

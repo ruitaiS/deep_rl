@@ -40,8 +40,8 @@ def run_demo(model):
 
         if terminated or truncated:
             print(f"Total Reward: {episode_reward}, Total Steps: {episode_steps}")
-            print(f"Terminated: {terminated}, Truncated: {truncated}")
-            print("resetting environment")
+            print(f"Terminated: {terminated}, Truncated: {truncated}\n")
+            #print("resetting environment")
             episode_reward = 0
             episode_steps = 0
             observation, info = env.reset()

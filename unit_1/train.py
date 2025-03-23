@@ -21,7 +21,7 @@ model = PPO(
     verbose=1)
 
 model.learn(total_timesteps = 500000)
-model.save("base_policy")
+model.save("__base_policy")
 
 # Evaluate Mean Reward of Current Model
 eval_env = Monitor(gym.make("LunarLander-v2", render_mode='rgb_array'))

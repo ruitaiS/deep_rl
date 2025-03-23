@@ -24,12 +24,9 @@ class Policy(ActorCriticPolicy):
     def predict(self, obs, state, episode_start, deterministic):
         actions, _ = super().predict(obs, state, episode_start, deterministic)
 
-        print("Observations Shape: ", obs.shape)
-        print("Actions Shape: ", actions.shape)
-
         # Randomly cut engines for fun
-        #p = 0.01
-        #sputter = random.random() < p
+        p = 0.01
+        sputter = random.random() < p
         sputter = False
 
         # Convert obs to numpy if it's a torch tensor

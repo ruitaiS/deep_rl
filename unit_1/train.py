@@ -20,7 +20,7 @@ model = PPO(
     ent_coef = 0.01,
     verbose=1)
 
-model.learn(total_timesteps = 500000)
+model.learn(total_timesteps = 1500000)
 model.save("__base_policy")
 
 # Evaluate Mean Reward of Current Model

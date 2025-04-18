@@ -12,7 +12,7 @@ observation, info = env.reset()
 model = PPO.load("__base_policy")
 model.policy = Policy(model.policy)
 show_demo = True
-upload = False
+upload = True
 
 if show_demo:
     demo.run_demo(model)

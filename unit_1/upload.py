@@ -9,10 +9,10 @@ env = gym.make("LunarLander-v2", render_mode="rgb_array")
 observation, info = env.reset()
 
 # Load Trained Model and apply extension:
-model = PPO.load("__base_policy")
+model = PPO.load("__v0.1b")
 model.policy = Policy(model.policy)
 show_demo = True
-upload = True
+upload = False 
 
 if show_demo:
     demo.run_demo(model)

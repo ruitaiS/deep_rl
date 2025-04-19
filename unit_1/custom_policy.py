@@ -27,7 +27,7 @@ class Policy(ActorCriticPolicy):
         # Randomly cut engines for fun
         p = 0.01
         sputter = random.random() < p
-        sputter = False
+        sputter = False 
 
         # Convert obs to numpy if it's a torch tensor
         obs_array = obs if isinstance(obs, np.ndarray) else obs.cpu().numpy()
